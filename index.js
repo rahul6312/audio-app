@@ -19,7 +19,7 @@ app.post('/api/get-data', async (req, res) => {
 
   const updatedPrompt = `Imagine you are a Chartered Accountant (CA) advising a client who is looking to optimize their tax strategy for the upcoming fiscal year. ${prompt}`
   if (process.env.USE_HINDI) {
-    updatedPrompt += 'Give your responses in hindi';
+    updatedPrompt = `${updatedPrompt}. Give your responses in hindi`;
   }
   try {
     const response = await axios.post(
