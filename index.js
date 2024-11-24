@@ -1,10 +1,12 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
 
 const apiKey = process.env.API_KEY;
 
 // Initialize Express app
 const app = express();
+app.use(cors());
 
 // Middleware to parse JSON
 app.use(express.json());
