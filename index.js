@@ -10,14 +10,13 @@ app.use(cors());
 
 // Middleware to parse JSON
 app.use(express.json());
-// app.use(cors());
 
 // Example API endpoint that calls GPT API
 app.post('/api/get-data', async (req, res) => {
   const { prompt } = req.body;
   console.log('Prompt is', prompt);
 
-  let updatedPrompt = `Imagine you are a Chartered Accountant (CA) advising a client who is looking to optimize their tax strategy for the upcoming fiscal year. ${prompt}`
+  let updatedPrompt = `${process.env.INITIAL_PROMPT} ${prompt}`;
   if (process.env.USE_HINDI) {
     updatedPrompt = `${updatedPrompt}. Give your responses in hindi`;
   }
@@ -27,7 +26,7 @@ app.post('/api/get-data', async (req, res) => {
       {
         model: 'gpt-3.5-turbo-instruct',
         prompt: updatedPrompt,
-        max_tokens: 50,
+        max_tokens: process.env.MAX_TOKENS,
       },
       {
         headers: {
@@ -36,7 +35,6 @@ app.post('/api/get-data', async (req, res) => {
         },
       }
     );
-    console.log('Here');
     res.json(response.data.choices[0].text.trim());
   } catch (error) {
     console.log(JSON.stringify(error));
