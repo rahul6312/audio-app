@@ -1,13 +1,9 @@
 const express = require('express');
 const path = require('path');
-const functions = require('firebase-functions');
 const axios = require('axios');
-const dotenv = require('dotenv');
 const cors = require('cors');
-dotenv.config();
 
-// API Key for GPT (use Firebase environment variables)
-const apiKey = functions.config().gpt.apikey;
+const apiKey = process.env.API_KEY;
 
 // Initialize Express app
 const app = express();
@@ -16,15 +12,15 @@ const app = express();
 app.use(express.json());
 // app.use(cors());
 
-// Serve static files from 'public' directory (Angular build)
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Example API endpoint that calls GPT API
 app.post('/api/get-data', async (req, res) => {
   console.log(req)
   const { prompt } = req.body;
 
   const updatedPrompt = `Imagine you are a Chartered Accountant (CA) advising a client who is looking to optimize their tax strategy for the upcoming fiscal year. ${prompt}`
+  if (process.env.USE_HINDI) {
+    updatedPrompt += 'Give your responses in hindi';
+  }
   try {
     const response = await axios.post(
       'https://api.openai.com/v1/completions',
@@ -46,15 +42,8 @@ app.post('/api/get-data', async (req, res) => {
   }
 });
 
-// For all other routes, serve the Angular app (SPA handling)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on PORT: ${PORT}`);
 });
 
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
-
-// Export the app as Firebase Function
-exports.app = functions.https.onRequest(app);
