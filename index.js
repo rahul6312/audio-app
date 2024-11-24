@@ -26,7 +26,7 @@ app.post('/api/get-data', async (req, res) => {
       {
         model: 'gpt-3.5-turbo-instruct',
         prompt: updatedPrompt,
-        max_tokens: process.env.MAX_TOKENS,
+        max_tokens: parseInt(process.env.MAX_TOKENS),
       },
       {
         headers: {
