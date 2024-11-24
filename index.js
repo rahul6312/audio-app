@@ -17,7 +17,7 @@ app.post('/api/get-data', async (req, res) => {
   const { prompt } = req.body;
   console.log('Prompt is', prompt);
 
-  const updatedPrompt = `Imagine you are a Chartered Accountant (CA) advising a client who is looking to optimize their tax strategy for the upcoming fiscal year. ${prompt}`
+  let updatedPrompt = `Imagine you are a Chartered Accountant (CA) advising a client who is looking to optimize their tax strategy for the upcoming fiscal year. ${prompt}`
   if (process.env.USE_HINDI) {
     updatedPrompt = `${updatedPrompt}. Give your responses in hindi`;
   }
