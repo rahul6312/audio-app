@@ -14,8 +14,8 @@ app.use(express.json());
 
 // Example API endpoint that calls GPT API
 app.post('/api/get-data', async (req, res) => {
-  console.log(req)
   const { prompt } = req.body;
+  console.log('Prompt is', prompt);
 
   const updatedPrompt = `Imagine you are a Chartered Accountant (CA) advising a client who is looking to optimize their tax strategy for the upcoming fiscal year. ${prompt}`
   if (process.env.USE_HINDI) {
@@ -36,8 +36,10 @@ app.post('/api/get-data', async (req, res) => {
         },
       }
     );
+    console.log('Here');
     res.json(response.data.choices[0].text.trim());
   } catch (error) {
+    console.log(JSON.stringify(error));
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
